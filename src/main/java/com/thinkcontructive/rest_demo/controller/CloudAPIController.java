@@ -18,14 +18,13 @@ public class CloudAPIController {
     }
 
     @GetMapping()
-    public List<CloudVendor> getAllCloudVendorDetails() {
-        return cloudVendorService.getAllCloudVendors();
+    public ResponseEntity<List<CloudVendor>>  getAllCloudVendorDetails() {
+        return ResponseEntity.ok(cloudVendorService.getAllCloudVendors());
     }
 
     @GetMapping("{vendorId}")
     public ResponseEntity<CloudVendor> getCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
-            CloudVendor vendor = cloudVendorService.getCloudVendor(vendorId);
-            return ResponseEntity.ok(vendor);
+            return ResponseEntity.ok(cloudVendorService.getCloudVendor(vendorId));
     }
 
     @PostMapping
@@ -36,19 +35,19 @@ public class CloudAPIController {
     }
 
     @PutMapping("{vendorId}")
-    public String updateCloudVendorDetails(@PathVariable String vendorId,
+    public ResponseEntity<CloudVendor> updateCloudVendorDetails(@PathVariable String vendorId,
                                            @RequestBody CloudVendor cloudVendor) {
         cloudVendor.setVendorId(vendorId);
         cloudVendorService.updateCloudVendor(cloudVendor);
-        return "Cloud Vendor Updated Successfully";
+        return ResponseEntity.ok(cloudVendor);
     }
 
 
     @DeleteMapping("{vendorId}")
-    public String deleteCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
+    public ResponseEntity<Void> deleteCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
 
         cloudVendorService.deleteCloudVendor(vendorId);
-        return "Cloud Vendor Deleted Successfully";
+        return ResponseEntity.noContent().build();
     }
 
 }
