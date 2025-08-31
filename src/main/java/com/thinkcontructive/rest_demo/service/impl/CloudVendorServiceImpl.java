@@ -1,5 +1,6 @@
 package com.thinkcontructive.rest_demo.service.impl;
 
+import com.thinkcontructive.rest_demo.exception.CloudVendorNotFoundException;
 import com.thinkcontructive.rest_demo.model.CloudVendor;
 import com.thinkcontructive.rest_demo.repository.CloudVendorRepository;
 import com.thinkcontructive.rest_demo.service.CloudVendorService;
@@ -31,7 +32,7 @@ public class CloudVendorServiceImpl implements CloudVendorService {
            return "Cloud Vendor updated successfully";
        }
 
-       throw new RuntimeException("Cloud Vendor not found with id: " + cloudVendor.getVendorId());
+       throw new CloudVendorNotFoundException("Cloud Vendor not found with id: " + cloudVendor.getVendorId());
     }
 
     @Override
@@ -41,12 +42,14 @@ public class CloudVendorServiceImpl implements CloudVendorService {
             return "Deleted Successfully";
         }
 
-        throw new RuntimeException("Cloud Vendor not found with id: "+ cloudVendorId);
+        throw new CloudVendorNotFoundException("Cloud Vendor not found with id: "+ cloudVendorId);
     }
 
     @Override
     public CloudVendor getCloudVendor(String cloudVendorId) {
-        return cloudVendorRepository.findById(cloudVendorId).orElseThrow(() -> new RuntimeException("Cloud Vendor not found with id: " + cloudVendorId));
+        if(cloudVendorRepository.findById(cloudVendorId).isEmpty())
+            throw new CloudVendorNotFoundException("Requested cloud vendor does not exist");
+        return cloudVendorRepository.findById(cloudVendorId).get();
     }
 
     @Override
