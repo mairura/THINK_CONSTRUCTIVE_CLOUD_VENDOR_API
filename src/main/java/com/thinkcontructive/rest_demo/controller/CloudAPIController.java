@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
-
 @RestController
 @RequestMapping("/cloudVendor")
 public class CloudAPIController {
@@ -21,37 +18,46 @@ public class CloudAPIController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CloudVendor>>  getAllCloudVendorDetails() {
-        return ResponseEntity.ok(cloudVendorService.getAllCloudVendors());
+    public ResponseEntity<Object>  getAllCloudVendorDetails() {
+        return ResponseHandler.responseBuilder("List of all Cloud Vendors",
+                HttpStatus.OK,
+                cloudVendorService.getAllCloudVendors()
+        );
     }
 
     @GetMapping("{vendorId}")
     public ResponseEntity<Object> getCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
-        return ResponseHandler.responseBuilder("Requested Vendor details are given here", HttpStatus.OK, cloudVendorService.getCloudVendor(vendorId));
-
+        return ResponseHandler.responseBuilder("Requested Vendor details are given here",
+                HttpStatus.OK,
+                cloudVendorService.getCloudVendor(vendorId)
+        );
     }
 
     @PostMapping
-    public ResponseEntity<CloudVendor> createCloudVendorDetails(@RequestBody CloudVendor cloudVendor) {
-
+    public ResponseEntity<Object> createCloudVendorDetails(@RequestBody CloudVendor cloudVendor) {
         cloudVendorService.createCloudVendor(cloudVendor);
-        return ResponseEntity.status(201).body(cloudVendor);
+        return ResponseHandler.responseBuilder("Vendor Created successfully",
+                HttpStatus.CREATED,
+                cloudVendor
+        );
     }
 
     @PutMapping("{vendorId}")
-    public ResponseEntity<CloudVendor> updateCloudVendorDetails(@PathVariable String vendorId,
+    public ResponseEntity<Object> updateCloudVendorDetails(@PathVariable String vendorId,
                                            @RequestBody CloudVendor cloudVendor) {
         cloudVendor.setVendorId(vendorId);
         cloudVendorService.updateCloudVendor(cloudVendor);
-        return ResponseEntity.ok(cloudVendor);
+        return ResponseHandler.responseBuilder("Vendor updated successfully",
+                HttpStatus.OK,
+                cloudVendor
+        );
     }
 
-
     @DeleteMapping("{vendorId}")
-    public ResponseEntity<Void> deleteCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
-
+    public ResponseEntity<Object> deleteCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
         cloudVendorService.deleteCloudVendor(vendorId);
-        return ResponseEntity.noContent().build();
+        return ResponseHandler.responseBuilder("Vendor deleted successfully",
+                HttpStatus.OK, null);
     }
 
 }
