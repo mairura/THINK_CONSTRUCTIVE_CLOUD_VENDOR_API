@@ -13,6 +13,13 @@ public class CloudVendorException {
         this.httpStatus = httpStatus;
     }
 
+    // Constructor without cause for production purposes
+//    public CloudVendorException(String message, HttpStatus httpStatus) {
+//        this.message = message;
+//        this.cause = null; // no cause in this case
+//        this.httpStatus = httpStatus;
+//    }
+
     public String getMessage() {
         return message;
     }
