@@ -1,11 +1,14 @@
 package com.thinkcontructive.rest_demo.controller;
 
 import com.thinkcontructive.rest_demo.model.CloudVendor;
+import com.thinkcontructive.rest_demo.response.ResponseHandler;
 import com.thinkcontructive.rest_demo.service.CloudVendorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/cloudVendor")
@@ -23,8 +26,9 @@ public class CloudAPIController {
     }
 
     @GetMapping("{vendorId}")
-    public ResponseEntity<CloudVendor> getCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
-            return ResponseEntity.ok(cloudVendorService.getCloudVendor(vendorId));
+    public ResponseEntity<Object> getCloudVendorDetails(@PathVariable("vendorId") String vendorId) {
+        return ResponseHandler.responseBuilder("Requested Vendor details are given here", HttpStatus.OK, cloudVendorService.getCloudVendor(vendorId));
+
     }
 
     @PostMapping
