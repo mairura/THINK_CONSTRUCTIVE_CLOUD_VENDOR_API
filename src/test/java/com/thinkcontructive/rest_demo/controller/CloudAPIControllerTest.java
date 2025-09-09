@@ -74,7 +74,14 @@ class CloudAPIControllerTest {
     }
 
     @Test
-    void updateCloudVendorDetails() {
+    void updateCloudVendorDetails() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(cloudVendorOne);
+
+        when(cloudVendorService.updateCloudVendor(cloudVendorOne)).thenReturn("Vendor updated successfully");
+        this.mockMvc.perform(put("/cloudVendor/{vendorId}", cloudVendorOne.getVendorId()).contentType(MediaType.APPLICATION_JSON).content(requestJson)).andDo(print()).andExpect(status().isOk());
     }
 
     @Test
