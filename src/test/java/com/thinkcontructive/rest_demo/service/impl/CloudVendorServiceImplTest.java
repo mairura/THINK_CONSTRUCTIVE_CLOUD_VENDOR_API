@@ -44,9 +44,16 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void updateCloudVendor() {
+    void testUpdateCloudVendor() {
+        // Mock existsById to return true
+        when(cloudVendorRepository.existsById(cloudVendor.getVendorId())).thenReturn(true);
+        // Mock save method
+        when(cloudVendorRepository.save(cloudVendor)).thenReturn(cloudVendor);
 
+        assertThat(cloudVendorService.updateCloudVendor(cloudVendor))
+                .isEqualTo("Cloud Vendor updated successfully");
     }
+
 
     @Test
     void deleteCloudVendor() {
