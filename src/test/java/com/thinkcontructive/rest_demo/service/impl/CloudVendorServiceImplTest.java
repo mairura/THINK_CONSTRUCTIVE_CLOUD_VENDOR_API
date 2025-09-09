@@ -6,7 +6,9 @@ import com.thinkcontructive.rest_demo.service.CloudVendorService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -14,8 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CloudVendorServiceImplTest {
 
@@ -57,11 +58,6 @@ class CloudVendorServiceImplTest {
                 .isEqualTo("Cloud Vendor updated successfully");
     }
 
-
-    @Test
-    void deleteCloudVendor() {
-    }
-
     @Test
     void testGetCloudVendor() {
         mock(CloudVendor.class);
@@ -80,5 +76,16 @@ class CloudVendorServiceImplTest {
 
         assertThat(cloudVendorService.getAllCloudVendors().get(0)
                 .getVendorPhoneNumber()).isEqualTo(cloudVendor.getVendorPhoneNumber());
+    }
+
+    @Test
+    void testDeleteCloudVendor() {
+        // Mock existsById to return true so the service thinks the vendor exists
+        when(cloudVendorRepository.existsById("1")).thenReturn(true);
+
+        // Mock deleteById to do nothing (default for void methods, but explicit is fine)
+        doNothing().when(cloudVendorRepository).deleteById("1");
+
+        assertThat(cloudVendorService.deleteCloudVendor("1")).isEqualTo("Deleted Successfully");
     }
 }

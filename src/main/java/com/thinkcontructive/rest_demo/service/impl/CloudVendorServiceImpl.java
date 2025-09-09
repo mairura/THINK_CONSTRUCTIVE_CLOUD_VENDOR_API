@@ -36,16 +36,6 @@ public class CloudVendorServiceImpl implements CloudVendorService {
     }
 
     @Override
-    public String deleteCloudVendor(String cloudVendorId) {
-        if(cloudVendorRepository.existsById(cloudVendorId)) {
-            cloudVendorRepository.deleteById(cloudVendorId);
-            return "Deleted Successfully";
-        }
-
-        throw new CloudVendorNotFoundException("Cloud Vendor not found with id: "+ cloudVendorId);
-    }
-
-    @Override
     public CloudVendor getCloudVendor(String cloudVendorId) {
         return cloudVendorRepository.findById(cloudVendorId)
                 .orElseThrow(() -> new CloudVendorNotFoundException("Vendor not found with id: " + cloudVendorId));
@@ -54,5 +44,15 @@ public class CloudVendorServiceImpl implements CloudVendorService {
     @Override
     public List<CloudVendor> getAllCloudVendors() {
         return cloudVendorRepository.findAll();
+    }
+
+    @Override
+    public String deleteCloudVendor(String cloudVendorId) {
+        if(cloudVendorRepository.existsById(cloudVendorId)) {
+            cloudVendorRepository.deleteById(cloudVendorId);
+            return "Deleted Successfully";
+        }
+
+        throw new CloudVendorNotFoundException("Cloud Vendor not found with id: "+ cloudVendorId);
     }
 }
