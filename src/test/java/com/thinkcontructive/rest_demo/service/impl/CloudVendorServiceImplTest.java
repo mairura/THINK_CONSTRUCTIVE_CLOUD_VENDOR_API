@@ -2,13 +2,14 @@ package com.thinkcontructive.rest_demo.service.impl;
 
 import com.thinkcontructive.rest_demo.model.CloudVendor;
 import com.thinkcontructive.rest_demo.repository.CloudVendorRepository;
-import com.thinkcontructive.rest_demo.repository.CloudVendorRepositoryTest;
 import com.thinkcontructive.rest_demo.service.CloudVendorService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
@@ -60,7 +61,13 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void getCloudVendor() {
+    void testGetCloudVendor() {
+        mock(CloudVendor.class);
+        mock(CloudVendorRepository.class);
+
+        when(cloudVendorRepository.findById("1")).thenReturn(Optional.ofNullable(cloudVendor));
+        assertThat(cloudVendorService.getCloudVendor("1").getVendorName())
+                .isEqualTo(cloudVendor.getVendorName());
     }
 
     @Test
