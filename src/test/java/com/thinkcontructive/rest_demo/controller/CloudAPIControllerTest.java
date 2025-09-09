@@ -1,5 +1,8 @@
 package com.thinkcontructive.rest_demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.thinkcontructive.rest_demo.model.CloudVendor;
 import com.thinkcontructive.rest_demo.service.CloudVendorService;
 import org.junit.jupiter.api.AfterEach;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -59,7 +63,14 @@ class CloudAPIControllerTest {
     }
 
     @Test
-    void createCloudVendorDetails() {
+    void testCreateCloudVendorDetails() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(cloudVendorOne);
+
+        when(cloudVendorService.createCloudVendor(cloudVendorOne)).thenReturn("Vendor Created successfully");
+        this.mockMvc.perform(post("/cloudVendor").contentType(MediaType.APPLICATION_JSON).content(requestJson)).andDo(print()).andExpect(status().isCreated());
     }
 
     @Test
