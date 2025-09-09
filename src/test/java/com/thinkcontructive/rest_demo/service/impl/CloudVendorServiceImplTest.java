@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -71,6 +73,12 @@ class CloudVendorServiceImplTest {
     }
 
     @Test
-    void getAllCloudVendors() {
+    void testGetAllCloudVendors() {
+        when(cloudVendorRepository.findAll()).thenReturn(
+                new ArrayList<CloudVendor>(Collections.singleton(cloudVendor))
+        );
+
+        assertThat(cloudVendorService.getAllCloudVendors().get(0)
+                .getVendorPhoneNumber()).isEqualTo(cloudVendor.getVendorPhoneNumber());
     }
 }
